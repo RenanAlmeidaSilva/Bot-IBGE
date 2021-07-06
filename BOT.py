@@ -64,34 +64,33 @@ async def echo(message: types.Message):
             arquivo.write('\n'+message["chat"]["username"]+'\n\n')
     else:
         await message.answer("Você não possui um Username. Logo, deverá ir em suas configurações e nomea-lo.")
-
     if textomsg in user:
-        entradas = ['oi', 'olá', 'ola', 'oie', 'roi', 'hey', 'eai', 'eae', 'salve', 'hello', 'ei', 'hi', 'oii', 'oiee']
+        entradas = ['oi', 'olá', 'ola', 'oie', 'hey', 'eai', 'eae', 'hello', 'ei', 'hi', 'oii', 'oiee','ou']
         txt = ''
         full
         for teste in full:
             if message.text.upper() in teste['nome']:
+                txt += ('Identificado.\nNome pesquisado: ' + message.text.upper())
                 if teste['genero']:
-                    txt += f'Gênero: {teste["genero"]}\n'
+                    txt += f'\n\n<b>Gênero:</b> <i>\n{teste["genero"]}</i>\n'
                 if teste['frequnciaF']:
-                    txt += f'\nFrequência Feminina:\n{teste["frequnciaF"]}\n'
+                    txt += f'\n<b>Frequência Feminina:</b> <i>\n{teste["frequnciaF"]}</i>\n'
                 if teste['frequnciaM']:
-                    txt += f'\nFrequência Masculina:\n{teste["frequnciaM"]}\n'
+                    txt += f'\n<b>Frequência Masculina:</b> <i>\n{teste["frequnciaM"]}</i>\n'
                 if teste['frequnciaT']:
-                    txt += f'\nFrequência Total:\n{teste["frequnciaT"]}\n'
+                    txt += f'\n<b>Frequência Total:</b> <i>\n{teste["frequnciaT"]}</i>\n'
+
         if txt != '':
-            await message.answer(txt)
+            await message.answer(txt, parse_mode=types.ParseMode.HTML)
         elif message.text.lower() in (entradas):
-            await message.answer('Olá ' + message['chat']['first_name'] + ', eu sou o Bot para o alarme 828D, criado para encontrar as informações do seu erro.\n'
+            await message.answer('Olá ' + message['chat']['first_name'] + ', sou o Bot IBGE. Criado para encontrar as informações do seu nome ou de outra pessoa (nomes masculinos).\n'
                                  'Você deve me fornecer um valor para pesquisa.')
-        else:
-            erro = "Você deve fornecer um valor válido."
+        elif message.text.isdigit() == False:
+            await message.answer('Nome não encontrado na base de dados.')
+
+        if message.text.isdigit():
+            erro = 'Forneça um nome.'
             await message.answer(erro)
-    else:
-        await message.answer("Olá, eu sou o Bot para o alarme 828D, criado para encontrar as informações do seu erro.\n"
-                             "No momento você não possui permissão para acessar as informações internas.\n"
-                             "Entre em contato com os desenvolvedores.\n"
-                             "Para mais informações dos meu criadores digite '/info'")
 
 
 if __name__ == '__main__':
